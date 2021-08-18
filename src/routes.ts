@@ -70,7 +70,7 @@ router.get("/comment", async (req, res)=>{
 
 
 
-//create points
+//add points
 router.post("/points", async (req, res)=>{
     try{
         console.log(req.body)
@@ -94,7 +94,7 @@ router.get("/points/:id", async (req, res)=>{
 })
 
 //delete points
-router.delete("/points", async (req, res)=>{
+router.post("/point", async (req, res)=>{
     try{
         console.log(req.body)
         const addPoint = await pool.query("delete from points where user_id =$1 and post_id = $2", [req.body.user_id, req.body.post_id]);
