@@ -83,9 +83,10 @@ router.post("/points", async (req, res)=>{
 })
 
 //get points
-router.get("/points", async (req, res)=>{
+router.get("/points/:id", async (req, res)=>{
     try{
-        const allPoints = await pool.query("select count(*) from points where post_id =$1",[req.body.post_id]);
+        const { id } = req.params;
+        const allPoints = await pool.query("select count(*) from points where post_id =$1",[id]);
         res.json(allPoints.rows);
     }catch(err){
         console.log(err.meesage)
