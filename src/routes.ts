@@ -1,4 +1,5 @@
 import express from 'express';
+import { login, register } from './auth';
 import { pool } from './db';
 
 const router = express.Router();
@@ -8,16 +9,22 @@ router.get('/', (_,res) =>{
 })
 
 //create user
-router.post("/register", async (req, res)=>{
-    try{
-        console.log(req.body)
-        const newUser = await pool.query("insert into users (username,password) values ($1,$2) returning *", [req.body.username, req.body.password]);
-        res.json(newUser.rows[0])
-        // res.send("got it.");
-    }catch(err){
-        console.log(err.meesage)
-    }
-})
+router.post("/register", register)
+
+//login
+router.post("/login", login)
+
+
+// router.post("/register", async (req, res)=>{
+//     try{
+//         console.log(req.body)
+//         const newUser = await pool.query("insert into users (username,password) values ($1,$2) returning *", [req.body.username, req.body.password]);
+//         res.json(newUser.rows[0])
+//         // res.send("got it.");
+//     }catch(err){
+//         console.log(err.meesage)
+//     }
+// })
 
 
 //create post
