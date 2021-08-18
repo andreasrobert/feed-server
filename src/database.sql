@@ -15,29 +15,27 @@ CREATE TABLE posts(
   id serial primary key,
   title text not null,
   body text default '...',
-  points int,
-  created_at DATE,
+  -- created_at DATE,
   creator_id int references users(id) not null
 );
 
 CREATE TABLE comments(
   id SERIAL PRIMARY KEY,
   comment text not null,
-  created_at DATE,
-  post_id int references posts(id),
-  user_id int references users(id)
+    -- created_at DATE,
+  post_id int references posts(id) not null,
+  user_id int references users(id) not null
 );
 
-create table points(
+create table points(   -- multiple time
   id SERIAL PRIMARY KEY,
-  vote int,
   post_id int references posts(id),
   user_id int references users(id)
 )
 
 
-create table favorites(
-   user_id int references users(id),
-   post_id int references posts(id),
+create table points(  -- one time
+   user_id int references users(id) not null,
+   post_id int references posts(id) not null,
    primary key (user_id, post_id) -- composite key
 );
