@@ -4,6 +4,7 @@ import { pool } from "./db";
 
 export const register = async (req: any, res: any) => {
   try {
+    console.log(req.body)
     //find if user already exist
     const findUser = await pool.query(
       "select username from users where username = $1",
@@ -11,7 +12,6 @@ export const register = async (req: any, res: any) => {
     );
     const user = findUser.rows.length;
     if (user) {
-      console.log("exist");
       res.json("username already used");
       return;
     }
@@ -25,7 +25,7 @@ export const register = async (req: any, res: any) => {
       "insert into users (username,password) values ($1,$2) returning *",
       [req.body.username, hashedPassword]
     );
-    res.status(200).send("user created");
+    res.json("user created");
   } catch (err) {
     console.log(err.meesage);
   }
@@ -33,6 +33,8 @@ export const register = async (req: any, res: any) => {
 
 export const login = async (req: any, res: any) => {
   try {
+    console.log(req.body)
+    
     // find username
     const findUser = await pool.query(
       "select * from users where username = $1",
@@ -45,18 +47,19 @@ export const login = async (req: any, res: any) => {
       res.json("username doesn't exist");
       return;
     }
-
+    console.log(findUser.rows[0].id)
 
     // compare inputed password and the hashed password from the database
     const validPassword = await bcrypt.compare(req.body.password, findUser.rows[0].password);
     if(!validPassword){
-        return res.status(400).send("Incorrect Password");
+      res.json("Incorrect Password");
+      return;
     }
 
     // console.log("valid?")
     // if valid give jwt token and redirect
     try{
-        const token = jwt.sign({id: req.body.username}, `${process.env.TOKEN_SECRET}` ,{ expiresIn: '500s' });
+        const token = jwt.sign({id: findUser.rows[0].id}, `${process.env.TOKEN_SECRET}` ,{ expiresIn: '15000s' });
         res.json({ token: token });
     } catch(error){
         res.status(500).send(error);
