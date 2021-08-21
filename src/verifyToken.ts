@@ -4,7 +4,6 @@ import cookie from "cookie";
 
 export default function (req:any, res:any, next:any) {
     console.log(req.headers)
-    res.header("Access-Control-Allow-Origin", "*");
     if(typeof req?.headers?.cookie !== "string" ){
         throw new Error("token is not a string")
         return 
