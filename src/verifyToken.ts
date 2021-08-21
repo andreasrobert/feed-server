@@ -3,7 +3,7 @@ import cookie from "cookie";
 
 
 export default function (req:any, res:any, next:any) {
-    // console.log("hello")
+    console.log(req.headers)
 
     if(typeof req?.headers?.cookie !== "string" ){
         throw new Error("token is not a string")
