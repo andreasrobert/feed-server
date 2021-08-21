@@ -77,7 +77,7 @@ router.post("/postpage", async (req: any, res) => {
 //create comment
 router.post("/newcomment", verifyToken, async (req: any, res) => {
   try {
-    // console.log("id= "+", post_id= "+req.body.post_id+", comment= "+req.body.comment)
+    console.log("id= "+", post_id= "+req.body.post_id+",  comment= "+req.body.comment)
     const newPost = await pool.query(
       "insert into comments (comment,post_id,user_id) values ($1,$2,$3) returning *",
       [req.body.comment, req.body.post_id, req.user.id]
