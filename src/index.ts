@@ -10,7 +10,7 @@ var PORT = Number(process.env.PORT || 4000);
 var HOST = process.env.HOST || "0.0.0.0";
 
 app.use(cors({credentials: true,
-  origin: 'http://localhost:3000'}));
+  origin: true}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/", routes);
