@@ -11,6 +11,12 @@ CREATE TABLE test1(
   created DATE default now() not null
 );
 
+CREATE TABLE users(
+  id SERIAL PRIMARY KEY,
+  username varchar(255) not null,
+  password not null
+);
+
 CREATE TABLE posts(
   id serial primary key,
   title text not null,
@@ -83,9 +89,10 @@ order by count(po.post_id) desc;
 
 
 
-
-
 select c.post_id, p.title ,  count(*) from comments c 
 full outer join posts p on p.id = c.post_id
 group by c.post_id, p.title ;
 
+
+
+TRUNCATE TABLE users,posts,comments,points RESTART IDENTITY;

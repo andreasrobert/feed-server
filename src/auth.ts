@@ -4,7 +4,7 @@ import { pool } from "./db";
 
 export const register = async (req: any, res: any) => {
   try {
-    console.log(req.body)
+
     //find if user already exist
     const findUser = await pool.query(
       "select username from users where username = $1",
@@ -33,8 +33,8 @@ export const register = async (req: any, res: any) => {
 
 export const login = async (req: any, res: any) => {
   try {
-    console.log(req.body)
-    
+    console.log(req.body);
+
     // find username
     const findUser = await pool.query(
       "select * from users where username = $1",
@@ -43,32 +43,34 @@ export const login = async (req: any, res: any) => {
     const user = findUser.rows.length;
 
     if (!user) {
-    //   console.log("dont exist");
       res.json("username doesn't exist");
       return;
     }
-    console.log(findUser.rows[0].id)
+    console.log(findUser.rows[0].id);
 
     // compare inputed password and the hashed password from the database
-    const validPassword = await bcrypt.compare(req.body.password, findUser.rows[0].password);
-    if(!validPassword){
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      findUser.rows[0].password
+    );
+    if (!validPassword) {
       res.json("Incorrect Password");
       return;
     }
 
-    // console.log("valid?")
     // if valid give jwt token and redirect
-    try{
-        const token = jwt.sign({id: findUser.rows[0].id}, `${process.env.TOKEN_SECRET}` ,{ expiresIn: '15000s' });
-        res.json({ token: token });
-    } catch(error){
-        res.status(500).send(error);
+    try {
+      const token = jwt.sign(
+        { id: findUser.rows[0].id },
+        `${process.env.TOKEN_SECRET}`,
+        { expiresIn: "15000s" }
+      );
+      res.json({ token: token });
+    } catch (error) {
+      res.status(500).send(error);
     }
 
     return;
-
-
-
   } catch (err) {
     console.log(err.meesage);
   }

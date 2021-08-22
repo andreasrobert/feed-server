@@ -9,15 +9,10 @@ router.get("/", (_, res) => {
   res.send("hello there");
 });
 
-//create user
 router.post("/register", register);
 
-//login
 router.post("/login", login);
 
-router.post("/test", verifyToken);
-
-//create post
 router.post("/post", verifyToken, async (req: any, res) => {
   try {
     const newPost = await pool.query(
@@ -25,7 +20,6 @@ router.post("/post", verifyToken, async (req: any, res) => {
       [req.body.title, req.body.body, req.user.id]
     );
     res.json(newPost.rows[0]);
-    // res.send("got it.");
   } catch (err) {
     console.log(err.meesage);
   }
@@ -60,7 +54,7 @@ router.post("/posts", async (req: any, res) => {
   }
 });
 
-//get single post ? why not use post for everything?
+//get single post
 router.post("/postpage", async (req: any, res) => {
   try {
     // console.log(req.user.id)
@@ -77,7 +71,13 @@ router.post("/postpage", async (req: any, res) => {
 //create comment
 router.post("/newcomment", verifyToken, async (req: any, res) => {
   try {
-    console.log("id= "+", post_id= "+req.body.post_id+",  comment= "+req.body.comment)
+    console.log(
+      "id= " +
+        ", post_id= " +
+        req.body.post_id +
+        ",  comment= " +
+        req.body.comment
+    );
     const newPost = await pool.query(
       "insert into comments (comment,post_id,user_id) values ($1,$2,$3) returning *",
       [req.body.comment, req.body.post_id, req.user.id]
